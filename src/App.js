@@ -3,9 +3,8 @@ import LoginForm from './components/Login'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import UserHeader from './components/UserHeader'
+import SaveBlog from './components/SaveBlog'
 
-// todo: add a logout button
-// todo: save the token to local storage
 // todo: add a form to add new blogs
 
 const App = () => {
@@ -44,6 +43,7 @@ const App = () => {
     <div>
       {user ? <UserHeader User={user} /> : null}
       {blogs ? blogs.map(blog => <Blog key={blog.id} blog={blog} />) : null}
+      {user ? <SaveBlog /> : null}
     </div>
   )
 }
