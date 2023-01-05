@@ -4,17 +4,17 @@ import loginService from '../services/login'
 
 const LoginForm = (props) => {
     const [password, setPassword] = useState('')
-    const [username, setUsername] = useState('')
+    const [userName, setUsername] = useState('')
 
     const handleLogin = async (event) => {
         event.preventDefault()
-        console.log(`logging in ${username} with pass ${password}`)
+        console.log(`logging in ${userName} with pass ${password}`)
 
         try {
-            const user = await loginService.login({ username, password })
+            const user = await loginService.login({ userName, password })
             console.log('👤', 'trying to log user')
             console.log('👤', user)
-            props.onLogin(username)
+            props.onLogin(userName)
         } catch (error) {
             console.log(error)
             console.log('❌', 'an error occured')

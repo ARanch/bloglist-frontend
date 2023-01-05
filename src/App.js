@@ -3,15 +3,18 @@ import LoginForm from './components/Login'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 
-
+// todo get blogs når user er logget ind - både ved start, og som callback
+// todo vis blogs når hentet
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
 
   useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs(blogs)
-    )
+    if (user) {
+      blogService.getAll().then(blogs =>
+        setBlogs(blogs)
+      )
+    }
   }, [])
 
   if (user === null) {
