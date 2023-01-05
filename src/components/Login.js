@@ -15,6 +15,7 @@ const LoginForm = (props) => {
             console.log('👤', 'logged in user:', user)
             props.setUser(user.userName)
             props.setToken(user.token)
+            window.localStorage.setItem('loggedUser', JSON.stringify(user))
         } catch (error) {
             console.log(error)
             console.log('❌', 'an error occured')
