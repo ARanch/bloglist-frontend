@@ -12,9 +12,9 @@ const LoginForm = (props) => {
 
         try {
             const user = await loginService.login({ userName, password })
-            console.log('👤', 'trying to log user')
-            console.log('👤', user)
-            props.onLogin(userName)
+            console.log('👤', 'logged in user:', user)
+            props.setUser(user.userName)
+            props.setToken(user.token)
         } catch (error) {
             console.log(error)
             console.log('❌', 'an error occured')

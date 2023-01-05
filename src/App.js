@@ -8,19 +8,22 @@ import blogService from './services/blogs'
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
+  const [token, setToken] = useState(null)
 
   useEffect(() => {
-    if (user) {
-      blogService.getAll().then(blogs =>
-        setBlogs(blogs)
-      )
+    if (token) {
+      blogService.getBlogs(token, setBlogs)
     }
-  }, [])
+  }, [token])
+
+  useEffect(() => {
+    console.log(' 📖 blogs:', blogs)
+  }, [blogs])
 
   if (user === null) {
     return (
       <div>
-        <LoginForm onLogin={setUser} />
+        <LoginForm setUser={setUser} setToken={setToken} />
       </div>
     )
   }
@@ -28,10 +31,10 @@ const App = () => {
   return (
     <div>
       {user ? <h1>Hej {user}!</h1> : null}
-      <h2>blogs</h2>
+      {/* <h2>blogs</h2>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
-      )}
+      )} */}
     </div>
   )
 }
