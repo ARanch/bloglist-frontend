@@ -13,10 +13,10 @@ import { NotificationContainer, NotificationManager } from 'react-notifications'
 // ✅ todo 5.5 add togglable component so that "add-blog" form is hidden by default
 // ✅ todo 5.6 extract the blog form (if not already done)
 // ✅ todo 5.7 add a button to the blog form that toggles the visibility of the details (use state, not props.children)
-// todo 5.8 add like button to each blog, increase likes via PUT request (send all data, since the server does not know which field to update)
-// todo 5.9 list blogs by number of likes (use array.sort())
-// todo 5.10a add a button to each blog that removes it from the list (use DELETE request)
-// todo 5.10b add delete to the backend
+// ✅ todo 5.8 add like button to each blog, increase likes via PUT request (send all data, since the server does not know which field to update)
+// ✅ todo 5.9 list blogs by number of likes (use array.sort())
+// ✅ todo 5.10a add a button to each blog that removes it from the list (use DELETE request)
+// ✅ todo 5.10b add delete to the backend
 
 
 const App = () => {
@@ -77,7 +77,9 @@ const App = () => {
   }, [token])
 
   useEffect(() => {
-    console.log(' 📖 blogs:', blogs)
+    if (blogs) {
+      console.log(' 📖 blogs:', blogs)
+    }
   }, [blogs])
 
   if (user === null) {
@@ -93,9 +95,13 @@ const App = () => {
         <div>
           {user ? <UserHeader user={user} updateNotification={updateNotification} /> : null}
           <Togglable buttonLabel="Add blog" ref={blogFormRef}>
-            {token ? <SaveBlog token={token} blogs={blogs} setBlogs={setBlogs} notification={updateNotification} /> : null}
+            {token ? <SaveBlog token={token} blogs={blogs} setBlogs={setBlogs} updateNotification={updateNotification} /> : null}
           </Togglable>
-          {blogs ? blogs.map(blog => <Blog key={blog.id} blog={blog} />) : null}
+          {blogs ? blogs.map(blog => <Blog
+            key={blog.id}
+            blog={blog}
+            token={token}
+            updateNotification={updateNotification} />) : null}
           <NotificationContainer />
         </div>
       </div>

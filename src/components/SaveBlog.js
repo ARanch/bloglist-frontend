@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import axios from 'axios'
 
-const SaveBlog = ({ token, blogs, setBlogs, notification }) => {
+const SaveBlog = ({ token, blogs, setBlogs, updateNotification }) => {
     const [title, setTitle] = useState('')
     const [author, setAuthor] = useState('')
     const [url, setUrl] = useState('')
@@ -21,7 +21,7 @@ const SaveBlog = ({ token, blogs, setBlogs, notification }) => {
             const newBlogList = [...blogs, response.data]
             console.log('📝', 'blogs:', newBlogList)
             setBlogs(newBlogList)
-            notification('success', 'Blog saved', '📝')
+            updateNotification('success', 'Blog saved', '📝')
             document.getElementById('blogsave').reset()
         }
         catch (error) {
