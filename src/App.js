@@ -4,13 +4,18 @@ import Blog from './components/Blog'
 import blogService from './services/blogs'
 import UserHeader from './components/UserHeader'
 import SaveBlog from './components/SaveBlog.js'
+import React from 'react';
+import { NotificationContainer, NotificationManager } from 'react-notifications' // https://www.npmjs.com/package/react-notifications
 
-// todo: add a form to add new blogs
+
+
+// todo: add notifications for succesful and unsuccesful blog creation, login, and logout
 
 const App = () => {
   const [blogs, setBlogs] = useState(null)
   const [user, setUser] = useState(null)
   const [token, setToken] = useState(null)
+  const [notification, setNotification] = useState({ type: 'error', message: null, title: null, timer: 2000, counter: 0 })
 
   if (token === null) {
     if (window.localStorage.getItem('loggedUser')) {
@@ -19,6 +24,41 @@ const App = () => {
       setUser(restoredUser.userName)
     }
   }
+
+  /** updateNotification
+   * @param {string} type 
+   * @param {string} message 
+   * @param {string} title 
+   * @param {int} timer
+   */
+  const updateNotification = (type, message, title, timer = 2000) => {
+    const newNotification = { type, message, title, timer, counter: 0 }
+    newNotification.counter = notification.counter += 1
+    newNotification.type = type
+    newNotification.message = message
+    newNotification.title = title
+    newNotification.timer = timer
+    setNotification(newNotification)
+    console.log(notification)
+  }
+
+  useEffect(() => {
+    if (notification.counter) {
+      switch (notification.type) {
+        case 'error':
+          console.log('🔥', 'error notification:', notification)
+          NotificationManager.error(notification.message, notification.title, notification.timer)
+          break
+        case 'success':
+          console.log('🎉', 'success notification:', notification)
+          NotificationManager.success(notification.message, notification.title, notification.timer)
+          break
+        default:
+          NotificationManager.error(notification.message, notification.title, notification.timer)
+          break
+      }
+    }
+  }, [notification.message])
 
   useEffect(() => {
     if (token) {
@@ -34,16 +74,20 @@ const App = () => {
   if (user === null) {
     return (
       <div>
-        <LoginForm setUser={setUser} setToken={setToken} />
+        <LoginForm setUser={setUser} setToken={setToken} updateNotification={updateNotification} />
+        <NotificationContainer />
       </div>
     )
   }
 
   return (
     <div>
-      {user ? <UserHeader User={user} /> : null}
-      {blogs ? blogs.map(blog => <Blog key={blog.id} blog={blog} />) : null}
-      {token ? <SaveBlog token={token} blogs={blogs} setBlogs={setBlogs} /> : null}
+      <div>
+        {user ? <UserHeader User={user} updateNotification={updateNotification} /> : null}
+        {blogs ? blogs.map(blog => <Blog key={blog.id} blog={blog} />) : null}
+        {token ? <SaveBlog token={token} blogs={blogs} setBlogs={setBlogs} notification={updateNotification} /> : null}
+        <NotificationContainer />
+      </div>
     </div>
   )
 }

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import loginService from '../services/login'
-
+import 'react-notifications/lib/notifications.css'
 
 const LoginForm = (props) => {
     const [password, setPassword] = useState('')
@@ -16,7 +16,9 @@ const LoginForm = (props) => {
             props.setUser(user.userName)
             props.setToken(user.token)
             window.localStorage.setItem('loggedUser', JSON.stringify(user))
+            props.updateNotification('success', 'Login successful', `Hello ${user.userName}! 😀`)
         } catch (error) {
+            props.updateNotification('error', 'username or password does not exist!', 'Login failed! 😢')
             console.log(error)
             console.log('❌', 'an error occured')
         }
