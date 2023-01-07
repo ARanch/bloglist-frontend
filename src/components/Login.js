@@ -1,45 +1,55 @@
 import { useState } from 'react'
 import loginService from '../services/login'
 import 'react-notifications/lib/notifications.css'
+import PropTypes from 'proptypes'
 
-const LoginForm = (props) => {
-    const [password, setPassword] = useState('')
-    const [userName, setUsername] = useState('')
+const LoginForm = ({
+	setUser,
+	setToken,
+	updateNotification
+}) => {
+	const [password, setPassword] = useState('')
+	const [userName, setUsername] = useState('')
 
-    const handleLogin = async (event) => {
-        event.preventDefault()
-        console.log(`logging in ${userName} with pass ${password}`)
+	LoginForm.propTypes = {
+		setUser: PropTypes.func.isRequired,
+		setToken: PropTypes.func.isRequired
+	}
 
-        try {
-            const user = await loginService.login({ userName, password })
-            console.log('👤', 'logged in user:', user)
-            props.setUser(user.userName)
-            props.setToken(user.token)
-            window.localStorage.setItem('loggedUser', JSON.stringify(user))
-            props.updateNotification('success', 'Login successful', `Hello ${user.userName}! 😀`)
-        } catch (error) {
-            props.updateNotification('error', 'username or password does not exist!', 'Login failed! 😢')
-            console.log(error)
-            console.log('❌', 'an error occured')
-        }
-    }
+	const handleLogin = async (event) => {
+		event.preventDefault()
+		console.log(`logging in ${userName} with pass ${password}`)
 
-    return (
-        <form onSubmit={handleLogin}>
-            <div>
-                <input input="username" name="Username" placeholder="Username"
-                    onChange={({ target }) => setUsername(target.value)} />
-            </div>
-            <div>
-                <input input="password" name="password" placeholder="Password"
-                    onChange={({ target }) => setPassword(target.value)}
-                />
-            </div>
-            <div>
-                <button type="submit">Login</button>
-            </div>
-        </form>
-    )
+		try {
+			const user = await loginService.login({ userName, password })
+			console.log('👤', 'logged in user:', user)
+			setUser(user.userName)
+			setToken(user.token)
+			window.localStorage.setItem('loggedUser', JSON.stringify(user))
+			updateNotification('success', 'Login successful', `Hello ${user.userName}! 😀`)
+		} catch (error) {
+			updateNotification('error', 'username or password does not exist!', 'Login failed! 😢')
+			console.log(error)
+			console.log('❌', 'an error occured')
+		}
+	}
+
+	return (
+		<form onSubmit={handleLogin}>
+			<div>
+				<input input="username" name="Username" placeholder="Username"
+					onChange={({ target }) => setUsername(target.value)} />
+			</div>
+			<div>
+				<input input="password" name="password" placeholder="Password"
+					onChange={({ target }) => setPassword(target.value)}
+				/>
+			</div>
+			<div>
+				<button type="submit">Login</button>
+			</div>
+		</form>
+	)
 }
 
 export default LoginForm
