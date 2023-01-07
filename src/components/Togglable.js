@@ -1,7 +1,11 @@
 import { useState, forwardRef, useImperativeHandle } from 'react'
 import PropTypes from 'prop-types'
 
+/** Example container-component for hiding and showing its children.
+ * <Togglable buttonLabel="show...">
+ */
 const Togglable = forwardRef((props, refs) => {
+	Togglable.displayName = 'Togglable' // 🐞 fixes "ForwardRef(Togglable) displayName is missing" warning
 	const [visible, setVisible] = useState(false)
 
 	const hideWhenVisible = { display: visible ? 'none' : '' }
