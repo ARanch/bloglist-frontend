@@ -91,6 +91,7 @@ const App = () => {
 	if (user === null) {
 		return (
 			<div>
+				<h1>Welcome to the Blogs app 👋</h1>
 				<LoginForm setUser={setUser} setToken={setToken} updateNotification={updateNotification} />
 				<NotificationContainer />
 			</div>
