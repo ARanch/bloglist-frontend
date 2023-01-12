@@ -50,6 +50,13 @@ const App = () => {
 		console.log(notification)
 	}
 
+	const addBlog = async (blog) => {
+		blogFormRef.current.toggleVisibility()
+		console.log('📝', 'addBlog() calling blogservice.saveBlog() with token: 🔑', token)
+		const sortedBlogs = await blogService.saveBlog(blogs, blog, token, updateNotification)
+		setBlogs(sortedBlogs)
+	}
+
 	useEffect(() => {
 		if (notification.counter) {
 			switch (notification.type) {
@@ -94,7 +101,7 @@ const App = () => {
 				<div>
 					{user ? <UserHeader user={user} updateNotification={updateNotification} /> : null}
 					<Togglable buttonLabel="Add blog" ref={blogFormRef}>
-						{token ? <SaveBlog token={token} blogs={blogs} setBlogs={setBlogs} updateNotification={updateNotification} /> : null}
+						{token ? <SaveBlog addBlog={addBlog} token={token} blogs={blogs} setBlogs={setBlogs} updateNotification={updateNotification} /> : null}
 					</Togglable>
 					{blogs ? blogs.map(blog => <Blog
 						key={blog.id}

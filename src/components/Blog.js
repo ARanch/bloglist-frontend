@@ -58,6 +58,7 @@ const Blog = ({ blog, token, updateNotification }) => {
 				console.log('❌', 'you already liked this blog!')
 			}
 		} catch (error) {
+			updateNotification('error', 'an error occured', '😨')
 			console.log('❌', 'an error occured – no blog was liked.', error)
 		}
 	}
