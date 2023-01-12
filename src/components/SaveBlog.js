@@ -13,6 +13,7 @@ const SaveBlog = ({ addBlog }) => {
 			author: author,
 			url: url
 		}
+		console.log('handleSave was called! 🚀', newBlog)
 		addBlog(newBlog)
 	}
 
