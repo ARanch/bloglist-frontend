@@ -20,7 +20,7 @@ const SaveBlog = ({ addBlog }) => {
 	return (
 		<form id="blogsave" onSubmit={handleSave}>
 			<div>
-				<input id="blogTitle" input="title" name="Title" placeholder="Title"
+				<input id="blogTitle" input="title" name="Title"  placeholder="Title"
 					onChange={({ target }) => setTitle(target.value)} />
 			</div>
 			<div>
