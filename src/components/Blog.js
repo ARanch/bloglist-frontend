@@ -63,7 +63,7 @@ const Blog = ({ blog, token, updateNotification }) => {
 		}
 	}
 	return (
-		<table className='blog' style={blogStyle}>
+		<table className='blog' style={blogStyle} data-cy='blogEntry'>
 			<tbody>
 				<tr>
 					<td>

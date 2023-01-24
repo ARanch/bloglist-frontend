@@ -73,19 +73,41 @@ describe('When logged in', function() {
 		cy.contains('blog to be deleted').should('not.exist')
 	})
 
-	it.only('only user who created a blog can delete it', function(){
-		cy.createBlog({ title: 'blog to be deleted', author: 'cypress delete', url: 'cypress.io' })
+	it('only user who created a blog can delete it', function(){
+		// 5.21
+		const blogName = 'blog cannot be deleted'
+		cy.createBlog({ title: blogName, author: 'cypress delete', url: 'cypress.io' })
 		cy.addUser({ userName: 'Another user', name: 'Dude', password: '123' })
 		cy.login({ userName: 'Another user', password: '123' })
 
-		cy.contains('blog to be deleted').parent().as('blog')
+		// find blog blog created by default user
+		cy.contains(blogName).parent().as('blog')
 		cy.get('@blog').contains('show details').as('showDetailsBtn')
 		cy.get('@showDetailsBtn').click()
 
+		// tries to delete blog using wrong user – should be denied
 		cy.contains('🗑️ Delete').parent().as('removeBtn')
 		cy.get('@removeBtn').click()
 
-		cy.contains('blog to be deleted').should('exist')
+		// blog still exists!
+		cy.contains(blogName).should('exist')
 	})
-})
 
+	it.only('blogs are ordered by likes', function() {
+		// 5.22
+		// create blogs
+		cy.createBlog({ title: 'blog 1', likes: 3 })
+		cy.createBlog({ title: 'blog 2', likes: 2 })
+		cy.createBlog({ title: 'blog 3', likes: 1 })
+
+		// check that blogs are ordered by likes
+		cy.get('[data-cy=blogEntry]').then(blogs => { // get all blogs by data-* attribute (see Blogs.js in backend)
+			cy.wrap(blogs[0]).contains('blog 1') // check order of elements
+			cy.wrap(blogs[1]).contains('blog 2')
+			cy.wrap(blogs[2]).contains('blog 3')
+		})
+
+	})
+
+
+})
